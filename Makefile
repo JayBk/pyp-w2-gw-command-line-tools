@@ -9,6 +9,14 @@ test:
 	@echo $(TAG)Running tests$(END)
 	PYTHONPATH=. py.test -s tests
 
+test-commands:
+	@echo $(TAG)Running tests$(END)
+	PYTHONPATH=. py.test -s tests/test_commands.py
+
+test-mixins:
+	@echo $(TAG)Running tests$(END)
+	PYTHONPATH=. py.test -s tests/test_mixins.py
+
 test-cov:
 	@echo $(TAG)Running tests with coverage$(END)
 	PYTHONPATH=. py.test --cov=$(PROJECT_PACKAGE) tests

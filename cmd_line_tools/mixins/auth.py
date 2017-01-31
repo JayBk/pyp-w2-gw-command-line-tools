@@ -34,5 +34,5 @@ class SimpleAuthenticationMixin(object):
                 return user
 
 # Can you think two more authentication services?
-# A Json based service and one based on a sqlite3 database?
-# Both are builtin modules in Python, should be easy ;)
+#                   vvvvvvvv                    
+# We added an API authentication check in api_auth.py

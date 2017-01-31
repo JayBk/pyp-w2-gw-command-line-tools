@@ -98,3 +98,68 @@ class AuthenticationMixinsTestCase(unittest.TestCase):
         obj.authenticate.assert_called_once_with('no-user', 'no-pass')
         self.assertFalse(obj.is_authenticated)
         self.assertIsNone(obj.user)
+
+
+class CheckWeatherInvalidTestCase(unittest.TestCase):
+    def test_with_invalid_arguments(self):
+        obj1 = WeatherMixin()
+        ans = obj1.checkweather("", "", "2cc9c28ac5bc116faba3f6609fba562f")
+        self.assertEqual(ans['message'], "Error: Not found city")
+
+    def test_with_valid_arguments_us(self):
+        us_name = "Anchorage"
+        obj1 = WeatherMixin()
+        data_1 = obj1.checkweather("99501", "us", "2cc9c28ac5bc116faba3f6609fba562f")
+        self.assertEqual(data_1["name"], us_name)
+        
+    def test_with_valid_arguments_nz(self):
+        nz_name = "Christchurch"
+        obj2 = WeatherMixin()
+        data_2 = obj2.checkweather("8011", "nz", "2cc9c28ac5bc116faba3f6609fba562f")
+        self.assertEqual(data_2["name"], nz_name)
+        
+
+class ApiCheckMixinTestCase(unittest.TestCase):
+    def test_with_invalid_api(self):
+        obj = ApiCheckMixin()
+        api_key = obj.authenticate_key('52456456456')
+        self.assertFalse(api_key)
+        
+    def test_with_valid_api(self):
+        obj = ApiCheckMixin()
+        api_key = obj.authenticate_key('2cc9c28ac5bc116faba3f6609fba562f')
+        self.assertTrue(api_key)
+       
+        
+    
+    
+"""        
+class ApiCheckMixin(object):
+    def authenticate_key(self, api_key):
+        msg = "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info."
+        check = requests.get('http://api.openweathermap.org/data/2.5/weather?zip=8011,nz&appid={}'.format(api_key))
+        check_json = check.json()
+        if check_json['message'] == msg:
+            return False
+        return True
+        """
+
+
+# vvvv They're SimpleCommandLineParserMixinTestCase... vvvv
+"""
+class SimpleCommandLineParserMixinTestCase(unittest.TestCase):
+    def test_with_arguments(self):
+        testargs = ["my_script", "username=johndoe", "password=123"]
+        with patch.object(sys, 'argv', testargs):
+            m = SimpleCommandLineParserMixin()  #<-----------------------------------------------------------
+            m.parse_arguments()
+            self.assertEqual(m._arguments['username'], 'johndoe')
+            self.assertEqual(m._arguments['password'], '123')
+
+    def test_with_no_arguments(self):
+        testargs = ["my_script"]
+        with patch.object(sys, 'argv', testargs):
+            m = SimpleCommandLineParserMixin()
+            m.parse_arguments()
+            self.assertEqual(len(m._arguments), 0)
+"""
